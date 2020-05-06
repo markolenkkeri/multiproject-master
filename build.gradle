@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
     id 'com.diffplug.gradle.spotless' version '3.29.0'
+    id 'com.github.jakemarsden.git-hooks' version '0.0.1'
 }
 
 ext {
@@ -19,6 +20,10 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+}
+
+gitHooks {
+    hooks = ['pre-push': 'check']
 }
 
 subprojects {
@@ -55,6 +60,7 @@ subprojects {
             mavenBom "com.microsoft.azure:azure-spring-boot-bom:${azureVersion}"
         }
     }
+    apply from:"${rootProject.file('gradle-submodule/base.gradle')}"
     test {
         useJUnitPlatform()
     }
