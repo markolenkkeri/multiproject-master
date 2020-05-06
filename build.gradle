@@ -1,66 +1,61 @@
 plugins {
-  id 'org.springframework.boot' version '2.2.6.RELEASE'
-  id 'io.spring.dependency-management' version '1.0.9.RELEASE'	
-  id 'java'
-  id 'com.diffplug.gradle.spotless' version '3.29.0'
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id 'com.diffplug.gradle.spotless' version '3.29.0'
 }
 
-Closure cl = { task -> println "I'm $task.project.name" }
-task('hello').doLast(cl)
-project(':demo') {
-    task('hello').doLast(cl)
-}
 ext {
-	set('azureVersion', "2.2.0")
+    set('azureVersion', "2.2.0")
 }
 
-apply from: './gradle-submodule/spotless.gradle'
+apply from: './gradle-submodule/base.gradle'
 
 configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 subprojects {
-  apply plugin: 'org.springframework.boot'
-  apply plugin: 'io.spring.dependency-management'
-  apply plugin: 'java'
-  apply plugin: 'com.diffplug.gradle.spotless'
-  group = 'com.example'
-  version = '1.0'
-  repositories {
-    mavenCentral()
-  }
-configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
-  dependencies {
-    implementation 'com.microsoft.azure:azure-spring-boot-starter'
-    implementation 'com.microsoft.azure:azure-storage-spring-boot-starter'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-      exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
+    apply plugin: 'com.diffplug.gradle.spotless'
+    group = 'com.example'
+    sourceCompatibility = '11'
+    repositories {
+        mavenCentral()
     }
-  }
-  dependencyManagement {
-    imports {
-      mavenBom "com.microsoft.azure:azure-spring-boot-bom:${azureVersion}"
+    configurations {
+        developmentOnly
+        runtimeClasspath {
+            extendsFrom developmentOnly
+        }
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
     }
-  }
-  test {
-    useJUnitPlatform()
-  }
+    dependencies {
+        implementation 'com.microsoft.azure:azure-spring-boot-starter'
+        implementation 'com.microsoft.azure:azure-storage-spring-boot-starter'
+        compileOnly 'org.projectlombok:lombok'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+    }
+    dependencyManagement {
+        imports {
+            mavenBom "com.microsoft.azure:azure-spring-boot-bom:${azureVersion}"
+        }
+    }
+    test {
+        useJUnitPlatform()
+    }
 }
