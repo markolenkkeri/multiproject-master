@@ -1,6 +1,3 @@
-[submodule "gradle-submodule"]
-	path = gradle-submodule
-	url = git@github.com:markolenkkeri/multiproject-gradle.git
 [submodule "demo"]
 	path = demo
 	url = git@github.com:markolenkkeri/multiproject-subproject.git
